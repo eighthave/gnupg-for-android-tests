@@ -30,7 +30,13 @@ public class NativeHelper {
 
     public static void setup(Context c) {
         context = c;
-        app_test_files = context.getDir("test_files", Context.MODE_PRIVATE).getAbsoluteFile();
+        File tmp = context.getDir("test_files", Context.MODE_PRIVATE);
+        try {
+            app_test_files = tmp.getCanonicalFile();
+        } catch (IOException e2) {
+            app_test_files = tmp.getAbsoluteFile();
+            e2.printStackTrace();
+        }
 
         FilenameFilter filter = new FilenameFilter() {
 
