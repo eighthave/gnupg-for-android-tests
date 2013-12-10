@@ -23,6 +23,9 @@ public class GpgCliTests extends AndroidTestCase {
         super.setUp();
         NativeHelper.setup(getContext());
         testFilePath = NativeHelper.app_test_files;
+        assert testFilePath.canRead();
+        assert testFilePath.canWrite();
+        assert testFilePath.isDirectory();
     }
 
     protected void tearDown() throws Exception {

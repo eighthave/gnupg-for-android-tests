@@ -51,9 +51,6 @@ public class NativeHelper {
 
         final PackageManager pm = context.getPackageManager();
         try {
-            ApplicationInfo appInfo = pm.getApplicationInfo(PACKAGE, PackageManager.GET_META_DATA);
-            String uid = String.valueOf(appInfo.uid);
-            Log.v(TAG, "uid: " + uid);
             Process getId = Runtime.getRuntime().exec("id");
             InputStream in = getId.getInputStream();
             getId.waitFor();
@@ -61,8 +58,8 @@ public class NativeHelper {
             int count = in.read(buffer);
             String id = null;
             if (count > 0) {
-                Log.i(TAG, "id: " + new String(buffer));
                 id = new String(buffer).split(" ")[0];
+                Log.i(TAG, "id: " + id);
             }
 
             // delete the GNUPGHOME folder from previous tests
@@ -71,20 +68,22 @@ public class NativeHelper {
                 Log.v(TAG, "found GNUPGHOME: " + NativeHelper.GNUPGHOME);
             else
                 Log.e(TAG, NativeHelper.GNUPGHOME + " is not a directory I can read!");
-        } catch (NameNotFoundException e1) {
-            e1.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (GNUPGHOME != null)
-            try {
-                FileUtils.deleteDirectory(NativeHelper.GNUPGHOME);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         Log.i(TAG, "Finished NativeHelper.setup()");
+    }
+
+    public static boolean recreateGnupgHome() {
+        try {
+            FileUtils.deleteDirectory(NativeHelper.GNUPGHOME);
+            return GNUPGHOME.mkdirs();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private static void copyFileOrDir(String path, File dest) {
