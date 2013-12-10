@@ -57,7 +57,18 @@ public class GpgCliTests extends AndroidTestCase {
                 assert true;
                 return;
             }
-        assert false;
+        boolean notfound = true;
+        for (GPGKey key : keys) {
+            String fp = key.getFingerprint();
+            if (fp.equals("")
+                    || fp.equals("0")
+                    || fp.equals("0000000000000000000000000000000000000000")
+                    || fp.equals("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    // one off of real fp
+                    || fp.equals("5E61C8780F86295CE17D86779F0FE587374BBE82"))
+                notfound = false;
+        }
+        assert notfound;
 
     }
 }
