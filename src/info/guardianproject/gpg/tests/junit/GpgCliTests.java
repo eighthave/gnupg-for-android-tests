@@ -71,4 +71,12 @@ public class GpgCliTests extends AndroidTestCase {
         assert notfound;
 
     }
+
+    public void testFileVerify() {
+        Log.i(TAG, "testFileVerify");
+        File sig = new File(testFilePath, "icon.png.sig");
+        assert gpgcli.verify(sig);
+        File asc = new File(testFilePath, "icon.png.asc");
+        assert gpgcli.verify(asc);
+    }
 }

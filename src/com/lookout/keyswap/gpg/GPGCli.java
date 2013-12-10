@@ -158,6 +158,15 @@ public class GPGCli implements GPGBinding {
 
     }
 
+    public boolean verify(File fileToVerify) {
+        String rawList = Exec(GPG_PATH, "--status-fd 1", "--verify");
+        Log.i(TAG, "verify: " + rawList);
+        if (rawList.contains("GOODSIG"))
+            return true;
+        else
+            return false;
+    }
+
     public void exportPublicKeyring(File outputFile) {
         try {
             exportPublicKeyring(outputFile.getCanonicalPath());
